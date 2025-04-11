@@ -9,46 +9,119 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="icon" href="../image/My Logo.png">
+    
+    <style>
+        :root {
+            --primary-blue: #1a56db;
+            --secondary-blue: #3b82f6;
+            --light-blue: #dbeafe;
+            --navy-blue: #1e3a8a;
+            --white: #ffffff;
+            --light-gray: #f3f4f6;
+        }
+        
+        .sidebar {
+            background: linear-gradient(to bottom, var(--navy-blue), var(--primary-blue));
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chat-header {
+            background: var(--primary-blue);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chat-area {
+            background-color: var(--white);
+        }
+        
+        .chat-input {
+            border-top: 1px solid var(--light-blue);
+            background-color: var(--white);
+        }
+        
+        .online-users {
+            background-color: var(--light-gray);
+            border-left: 1px solid #e5e7eb;
+        }
+        
+        .users-header {
+            background: var(--primary-blue);
+        }
+        
+        .custom-btn {
+            background-color: var(--secondary-blue);
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        .custom-btn:hover {
+            background-color: var(--navy-blue);
+            transform: translateY(-1px);
+        }
+        
+        .logout-btn {
+            background-color: transparent;
+            border: 1px solid var(--white);
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        #chatMessages {
+            background-color: var(--light-gray);
+        }
+        
+        #messageInput {
+            border: 1px solid var(--light-blue);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+    
 </head>
 <body class="bg-light">
     <div class="container-fluid vh-100 p-0">
         <div class="row g-0 h-100">
-            <!-- Simplified Sidebar -->
-            <div class="col-md-2 bg-primary text-white p-3 d-flex flex-column">
-                <h3 class="mb-4">Dashboard</h3>
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar text-white p-3 d-flex flex-column">
+                <h3 class="mb-4 fw-bold">Dashboard</h3>
                 <div class="mb-4">
-                    <p class="mb-2">Welcome to your chat application</p>
+                    <p class="mb-2 opacity-75">Welcome to your chat application</p>
                 </div>
-                <button id="logoutBtn" class="btn btn-outline-light mt-auto">Logout</button>
+                <button id="logoutBtn" class="btn logout-btn mt-auto">
+                    <i class="bi bi-box-arrow-right me-2"></i>Logout
+                </button>
             </div>
             
-            <!-- Emphasized Chat Area -->
-            <div class="col-md-8 d-flex flex-column bg-white h-100">
+            <!-- Chat Area -->
+            <div class="col-md-8 d-flex flex-column chat-area h-100">
                 <!-- Chat Header -->
-                <div class="p-3 border-bottom bg-primary text-white">
+                <div class="p-3 chat-header text-white d-flex align-items-center">
+                    <i class="bi bi-chat-dots-fill me-2"></i>
                     <h4 class="m-0">Chat Room</h4>
                 </div>
                 
-                <!-- Chat Messages (Emphasized) -->
-                <div id="chatMessages" class="flex-grow-1 p-4 overflow-auto">
+                <!-- Chat Messages -->
+                <div id="chatMessages" class="flex-grow-1 p-4 overflow-auto rounded-3 m-2">
                     <!-- Messages will be populated here -->
                 </div>
                 
-                <!-- Enhanced Message Input -->
-                <div class="p-3 border-top">
+                <!-- Message Input -->
+                <div class="p-3 chat-input">
                     <div class="input-group">
-                        <input type="text" id="messageInput" class="form-control form-control-lg" placeholder="Type your message...">
-                        <button id="sendMessageBtn" class="btn btn-primary btn-lg">
+                        <input type="text" id="messageInput" class="form-control form-control-lg rounded-start-3" placeholder="Type your message...">
+                        <button id="sendMessageBtn" class="btn custom-btn btn-lg text-white rounded-end-3">
                             <i class="bi bi-send"></i> Send
                         </button>
                     </div>
                 </div>
             </div>
             
-            <!-- Simplified Online Users -->
-            <div class="col-md-2 bg-light border-start">
-                <div class="p-3 border-bottom bg-primary text-white">
-                    <h5 class="m-0">Online Users</h5>
+            <!-- Online Users -->
+            <div class="col-md-2 online-users">
+                <div class="p-3 users-header text-white">
+                    <h5 class="m-0"><i class="bi bi-people-fill me-2"></i>Online Users</h5>
                 </div>
                 <div class="p-2">
                     <ul id="onlineUsersList" class="list-group list-group-flush">
