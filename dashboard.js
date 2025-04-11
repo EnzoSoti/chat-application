@@ -16,7 +16,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 // Connect to Socket.io server
-const socket = io('http://localhost:3000'); // Replace with your server URL
+const socket = io('https://88f3034c-e7b0-43d8-9ab9-f6c9c9cf7d2d-00-29lorfxjv1mn.pike.replit.dev/'); // Replace with your server URL
 let currentUserId = null;
 let currentUserEmail = null;
 
