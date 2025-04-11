@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
@@ -16,6 +15,18 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
+// Function to show toast notifications
+function showToast(message, isError = false) {
+  Toastify({
+    text: message,
+    duration: 3000,
+    gravity: "top",
+    position: "right",
+    backgroundColor: isError ? "#ff5252" : "#4caf50",
+    stopOnFocus: true,
+  }).showToast();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const registerForm = document.getElementById("registerForm");
   
@@ -30,17 +41,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Basic validation
     if (!username || !email || !password || !confirmPassword) {
-      alert("Please fill in all fields");
+      showToast("Please fill in all fields", true);
       return;
     }
     
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      showToast("Passwords do not match", true);
       return;
     }
     
     if (!agreeTerms) {
-      alert("Please agree to the Terms of Service and Privacy Policy");
+      showToast("Please agree to the Terms of Service and Privacy Policy", true);
       return;
     }
     
@@ -51,9 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const user = userCredential.user;
         
         // Here you could store additional user data like username in Firestore
-        // For now, just alert and redirect
-        alert("Account created successfully!");
-        window.location.href = "/index.html";
+        // For now, just show toast and redirect
+        showToast("Account created successfully!");
+        setTimeout(() => {
+          window.location.href = "/index.html";
+        }, 1500);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -61,11 +74,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Show specific error messages
         if (errorCode === 'auth/email-already-in-use') {
-          alert("This email is already registered. Please use a different email or login.");
+          showToast("This email is already registered. Please use a different email or login.", true);
         } else if (errorCode === 'auth/weak-password') {
-          alert("Password is too weak. Please use a stronger password.");
+          showToast("Password is too weak. Please use a stronger password.", true);
         } else {
-          alert(errorMessage);
+          showToast(errorMessage, true);
         }
       });
   });

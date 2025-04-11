@@ -1,6 +1,5 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, setPersistence, browserSessionPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, setPersistence, browserSessionPersistence, browserLocalPersistence, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -15,6 +14,18 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
+
+// Function to show toast notifications
+function showToast(message, isError = false) {
+  Toastify({
+    text: message,
+    duration: 3000,
+    gravity: "top",
+    position: "right",
+    backgroundColor: isError ? "#ff5252" : "#4caf50",
+    stopOnFocus: true,
+  }).showToast();
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById("loginForm");
@@ -40,10 +51,10 @@ document.addEventListener('DOMContentLoaded', () => {
       .then((userCredential) => {
         // Signed in 
         const user = userCredential.user;
-        
-        // Redirect to chat or dashboard page
-        alert("Login successful!");
-        window.location.href = "chat.html"; // Change this to your app's main page
+        showToast("Login successful!");
+        setTimeout(() => {
+          window.location.href = "chat.html";
+        }, 1500);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -51,9 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Show specific error messages
         if (errorCode === 'auth/user-not-found' || errorCode === 'auth/wrong-password') {
-          alert("Invalid email or password. Please try again.");
+          showToast("Invalid email or password. Please try again.", true);
         } else {
-          alert(errorMessage);
+          showToast(errorMessage, true);
         }
       });
   });
@@ -64,20 +75,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const email = document.getElementById("email").value;
     
     if (!email) {
-      alert("Please enter your email address to reset your password");
+      showToast("Please enter your email address to reset your password", true);
       return;
     }
     
-    // You would need to import sendPasswordResetEmail from Firebase Auth
-    // and implement the password reset functionality
-    alert("Password reset functionality would be implemented here.");
-    // Example implementation:
-    // sendPasswordResetEmail(auth, email)
-    //   .then(() => {
-    //     alert("Password reset email sent. Please check your inbox.");
-    //   })
-    //   .catch((error) => {
-    //     alert("Error sending password reset email: " + error.message);
-    //   });
+    // Implement password reset functionality with the imported sendPasswordResetEmail
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        showToast("Password reset email sent. Please check your inbox.");
+      })
+      .catch((error) => {
+        showToast("Error sending password reset email: " + error.message, true);
+      });
   });
 });
