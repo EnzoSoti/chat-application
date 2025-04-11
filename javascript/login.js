@@ -1,7 +1,14 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, setPersistence, browserSessionPersistence, browserLocalPersistence, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { 
+  getAuth, 
+  signInWithEmailAndPassword, 
+  setPersistence, 
+  browserSessionPersistence, 
+  browserLocalPersistence, 
+  sendPasswordResetEmail 
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
-// Your web app's Firebase configuration
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBd4Dxe_gZ4kL1cd2_fCSn0u2BXSzNLHbw",
   authDomain: "chap-application-7fbe1.firebaseapp.com",
@@ -15,7 +22,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
-// Function to show toast notifications
+// Toast notification function
 function showToast(message, isError = false) {
   Toastify({
     text: message,
@@ -27,12 +34,20 @@ function showToast(message, isError = false) {
   }).showToast();
 }
 
+// Prevent going back function
+function preventBackNavigation() {
+  history.pushState(null, null, window.location.href);
+  window.addEventListener('popstate', function() {
+    history.pushState(null, null, window.location.href);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById("loginForm");
   const rememberMeCheckbox = document.getElementById("remember");
   const forgotPasswordLink = document.getElementById("forgotPassword");
   
-  // Handle login form submission
+  // Login form submission
   loginForm.addEventListener("submit", (event) => {
     event.preventDefault();
     
@@ -40,52 +55,48 @@ document.addEventListener('DOMContentLoaded', () => {
     const password = document.getElementById("password").value;
     const rememberMe = rememberMeCheckbox.checked;
     
-    // Set persistence based on remember me checkbox
     const persistenceType = rememberMe ? browserLocalPersistence : browserSessionPersistence;
     
     setPersistence(auth, persistenceType)
       .then(() => {
-        // Sign in user with email and password
         return signInWithEmailAndPassword(auth, email, password);
       })
       .then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
         showToast("Login successful!");
+        
+        // Prevent back navigation
+        preventBackNavigation();
+        
+        // Redirect with replace to prevent going back
         setTimeout(() => {
-          window.location.href = "chat.html";
+          window.location.replace("../pages/dashboard.html");
         }, 1500);
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        
-        // Show specific error messages
-        if (errorCode === 'auth/user-not-found' || errorCode === 'auth/wrong-password') {
-          showToast("Invalid email or password. Please try again.", true);
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          showToast("Invalid email or password", true);
         } else {
-          showToast(errorMessage, true);
+          showToast(error.message, true);
         }
       });
   });
   
-  // Handle forgot password
+  // Forgot password
   forgotPasswordLink.addEventListener("click", (event) => {
     event.preventDefault();
     const email = document.getElementById("email").value;
     
     if (!email) {
-      showToast("Please enter your email address to reset your password", true);
+      showToast("Please enter your email", true);
       return;
     }
     
-    // Implement password reset functionality with the imported sendPasswordResetEmail
     sendPasswordResetEmail(auth, email)
       .then(() => {
-        showToast("Password reset email sent. Please check your inbox.");
+        showToast("Password reset email sent. Check your inbox.");
       })
       .catch((error) => {
-        showToast("Error sending password reset email: " + error.message, true);
+        showToast("Error: " + error.message, true);
       });
   });
 });

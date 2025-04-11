@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
-// Your web app's Firebase configuration
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBd4Dxe_gZ4kL1cd2_fCSn0u2BXSzNLHbw",
   authDomain: "chap-application-7fbe1.firebaseapp.com",
@@ -15,7 +15,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
-// Function to show toast notifications
+// Toast notification function
 function showToast(message, isError = false) {
   Toastify({
     text: message,
@@ -25,6 +25,14 @@ function showToast(message, isError = false) {
     backgroundColor: isError ? "#ff5252" : "#4caf50",
     stopOnFocus: true,
   }).showToast();
+}
+
+// Prevent going back function
+function preventBackNavigation() {
+  history.pushState(null, null, window.location.href);
+  window.addEventListener('popstate', function() {
+    history.pushState(null, null, window.location.href);
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -39,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmPassword = document.getElementById("confirmPassword").value;
     const agreeTerms = document.getElementById("agreeTerms").checked;
     
-    // Basic validation
+    // Validation
     if (!username || !email || !password || !confirmPassword) {
       showToast("Please fill in all fields", true);
       return;
@@ -55,30 +63,26 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     
-    // Create user with email and password
+    // Create user
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed up 
-        const user = userCredential.user;
-        
-        // Here you could store additional user data like username in Firestore
-        // For now, just show toast and redirect
         showToast("Account created successfully!");
+        
+        // Prevent back navigation
+        preventBackNavigation();
+        
+        // Redirect with replace to prevent going back
         setTimeout(() => {
-          window.location.href = "/index.html";
+          window.location.replace("/index.html");
         }, 1500);
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        
-        // Show specific error messages
-        if (errorCode === 'auth/email-already-in-use') {
-          showToast("This email is already registered. Please use a different email or login.", true);
-        } else if (errorCode === 'auth/weak-password') {
-          showToast("Password is too weak. Please use a stronger password.", true);
+        if (error.code === 'auth/email-already-in-use') {
+          showToast("Email already registered. Please login.", true);
+        } else if (error.code === 'auth/weak-password') {
+          showToast("Password should be at least 6 characters", true);
         } else {
-          showToast(errorMessage, true);
+          showToast(error.message, true);
         }
       });
   });
