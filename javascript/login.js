@@ -20,7 +20,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+const auth = getAuth(app);
 
 // Toast notification function
 function showToast(message, isError = false) {
@@ -46,28 +46,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById("loginForm");
   const rememberMeCheckbox = document.getElementById("remember");
   const forgotPasswordLink = document.getElementById("forgotPassword");
-  
+
   // Login form submission
   loginForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    
+
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const rememberMe = rememberMeCheckbox.checked;
-    
+
     const persistenceType = rememberMe ? browserLocalPersistence : browserSessionPersistence;
-    
+
     setPersistence(auth, persistenceType)
       .then(() => {
         return signInWithEmailAndPassword(auth, email, password);
       })
       .then((userCredential) => {
         showToast("Login successful!");
-        
+
         // Prevent back navigation
         preventBackNavigation();
-        
-        // Redirect with replace to prevent going back
+
+        // Redirect to dashboard
         setTimeout(() => {
           window.location.replace("../pages/dashboard.html");
         }, 1500);
@@ -80,17 +80,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
   });
-  
+
   // Forgot password
   forgotPasswordLink.addEventListener("click", (event) => {
     event.preventDefault();
     const email = document.getElementById("email").value;
-    
+
     if (!email) {
       showToast("Please enter your email", true);
       return;
     }
-    
+
     sendPasswordResetEmail(auth, email)
       .then(() => {
         showToast("Password reset email sent. Check your inbox.");

@@ -1,0 +1,17 @@
+.chat-container {
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    background-color: #f8f9fa;
+}
+.message-area {
+    height: 400px;
+    overflow-y: auto;
+}
+.user-message {
+    background-color: #4285f4;
+    border-radius: 18px 18px 0 18px;
+}
+.other-message {
+    background-color: #e9ecef;
+    border-radius: 18px 18px 18px 0;
+}
