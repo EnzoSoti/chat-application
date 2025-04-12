@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const messages = chatMessages.querySelectorAll('.message');
                 messages.forEach(message => {
                     if (message.classList.contains('sent')) {
-                        message.classList.add('bg-primary', 'text-white', 'rounded-4', 'p-3', 'mb-4', 'ms-auto');
+                        message.classList.add('bg-primary', 'text-black', 'rounded-4', 'p-3', 'mb-4', 'ms-auto');
                         message.style.maxWidth = '80%';
                         // Add shadow for emphasis
                         message.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';

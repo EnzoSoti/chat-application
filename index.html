@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="module" src="./javascript/login.js" defer></script>
     <link rel="icon" href="./image/My Logo.png">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" defer></script>
     <!-- CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <!-- JavaScript -->
@@ -18,53 +16,53 @@
     <link rel="stylesheet" href="../css/font.css">
     <title>Chat App Login</title>
 </head>
-<body class="bg-light">
-    <div class="container">
-        <div class="row justify-content-center vh-100 align-items-center">
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body p-4">
-                        <div class="text-center mb-4">
-                            <img src="./image/My Logo.png" alt="Logo" class="img-fluid mb-3" style="max-height: 80px;">
-                            <h4 class="fw-bold text-primary">Welcome Back</h4>
-                            <p class="text-muted small">Sign in to continue to Chat App</p>
+<body class="bg-gray-100">
+    <div class="container mx-auto">
+        <div class="flex justify-center items-center min-h-screen">
+            <div class="w-full max-w-md px-4">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <div class="text-center mb-6">
+                            <img src="./image/My Logo.png" alt="Logo" class="h-20 mx-auto mb-4">
+                            <h4 class="text-xl font-bold text-blue-600">Welcome Back</h4>
+                            <p class="text-gray-500 text-sm">Sign in to continue to Chat App</p>
                         </div>
                         
                         <form id="loginForm">
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                            <div class="mb-4">
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" id="email" placeholder="Enter your email" required>
                             </div>
                             
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                            <div class="mb-4">
+                                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                                <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" id="password" placeholder="Enter your password" required>
                             </div>
                             
-                            <div class="d-flex justify-content-between mb-3">
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="remember">
-                                    <label class="form-check-label" for="remember">Remember me</label>
+                            <div class="flex justify-between mb-4">
+                                <div class="flex items-center">
+                                    <input type="checkbox" class="mr-2" id="remember">
+                                    <label class="text-sm text-gray-600" for="remember">Remember me</label>
                                 </div>
-                                <a href="#" id="forgotPassword" class="text-decoration-none text-primary">Forgot password?</a>
+                                <a href="#" id="forgotPassword" class="text-blue-600 hover:underline text-sm">Forgot password?</a>
                             </div>
                             
-                            <div class="d-grid">
-                                <button type="submit" id="submit" class="btn btn-primary">Sign In</button>
+                            <div class="mb-4">
+                                <button type="submit" id="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200">Sign In</button>
                             </div>
                             
-                            <div class="text-center mt-4">
-                                <p class="mb-0">Don't have an account? <a href="./pages/register.html" id="registerLink" class="text-decoration-none text-primary">Sign up</a></p>
+                            <div class="text-center mt-6">
+                                <p class="text-gray-600">Don't have an account? <a href="./pages/register.html" id="registerLink" class="text-blue-600 hover:underline">Sign up</a></p>
                             </div>
                         </form>
                         
-                        <hr class="my-4">
+                        <hr class="my-6 border-gray-200">
                         
                         <div class="text-center">
-                            <p class="text-muted small">
+                            <p class="text-gray-500 text-sm">
                                 By continuing, you agree to our 
-                                <a href="#" id="termsLink" class="text-decoration-none">Terms of Service</a> and 
-                                <a href="#" id="privacyLink" class="text-decoration-none">Privacy Policy</a>
+                                <a href="#" id="termsLink" class="text-gray-600 hover:underline">Terms of Service</a> and 
+                                <a href="#" id="privacyLink" class="text-gray-600 hover:underline">Privacy Policy</a>
                             </p>
                         </div>
                     </div>
