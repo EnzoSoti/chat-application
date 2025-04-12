@@ -16,7 +16,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 // Connect to Socket.io server
-const socket = io('https://88f3034c-e7b0-43d8-9ab9-f6c9c9cf7d2d-00-29lorfxjv1mn.pike.replit.dev/'); // Replace with your server URL
+const socket = io('https://88f3034c-e7b0-43d8-9ab9-f6c9c9cf7d2d-00-29lorfxjv1mn.pike.replit.dev/');
 let currentUserId = null;
 let currentUserEmail = null;
 
@@ -29,12 +29,21 @@ const chatMessages = document.getElementById('chatMessages');
 const messageInput = document.getElementById('messageInput');
 const sendMessageBtn = document.getElementById('sendMessageBtn');
 const logoutBtn = document.getElementById('logoutBtn');
+const onlineUsersCounter = document.querySelector('.text-xs.text-gray-500.flex.items-center');
+
+// User profile elements
+const userProfileName = document.querySelector('.p-4.border-t .flex.items-center .ml-3 .font-medium');
+const userProfileEmail = document.querySelector('.p-4.border-t .flex.items-center .ml-3 .text-xs.text-gray-500');
+const userProfileInitials = document.querySelector('.p-4.border-t .flex.items-center .w-10.h-10.rounded-full');
 
 // Check authentication state
 onAuthStateChanged(auth, (user) => {
   if (user) {
     currentUserId = user.uid;
     currentUserEmail = user.email;
+    
+    // Update user profile in sidebar
+    updateUserProfile(user);
     
     // Register user with Socket.io
     socket.emit('register', {
@@ -46,6 +55,37 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+// Update user profile information in the sidebar
+function updateUserProfile(user) {
+  if (userProfileEmail) {
+    userProfileEmail.textContent = user.email;
+  }
+  
+  if (userProfileName) {
+    // Use displayName if available, otherwise use email
+    const displayName = user.displayName || user.email.split('@')[0];
+    userProfileName.textContent = displayName;
+  }
+  
+  if (userProfileInitials) {
+    // Get initials from display name or email
+    let initials;
+    if (user.displayName) {
+      // Get initials from display name (first letter of first and last name)
+      initials = user.displayName.split(' ')
+        .map(name => name.charAt(0))
+        .join('')
+        .toUpperCase()
+        .substring(0, 2);
+    } else {
+      // Get first two letters from email
+      initials = user.email.substring(0, 2).toUpperCase();
+    }
+    
+    userProfileInitials.textContent = initials;
+  }
+}
+
 // Socket.io event listeners
 socket.on('onlineUsers', (users) => {
   onlineUsersList.innerHTML = '';
@@ -54,6 +94,12 @@ socket.on('onlineUsers', (users) => {
   Object.keys(users).forEach(userId => {
     onlineUsersData[userId] = users[userId];
   });
+  
+  // Count the number of online users
+  const onlineCount = Object.keys(users).length;
+  
+  // Update the counter display
+  updateOnlineCounter(onlineCount);
   
   // Add current user first
   if (currentUserId && currentUserEmail) {
@@ -71,6 +117,16 @@ socket.on('onlineUsers', (users) => {
 socket.on('receiveMessage', (data) => {
   displayMessage(data.senderId, data.senderEmail, data.message, false, data.timestamp);
 });
+
+// Update the online users counter
+function updateOnlineCounter(count) {
+  if (onlineUsersCounter) {
+    onlineUsersCounter.innerHTML = `
+      <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
+      ${count} ${count === 1 ? 'member' : 'members'} online
+    `;
+  }
+}
 
 // Display a message in the chat
 function displayMessage(senderId, senderEmail, message, isSent, timestamp) {
@@ -102,11 +158,15 @@ function displayMessage(senderId, senderEmail, message, isSent, timestamp) {
 // Add user to online list
 function addUserToOnlineList(userId, email) {
   const listItem = document.createElement('li');
+  listItem.className = 'flex items-center space-x-2 px-3 py-2 hover:bg-gray-100 rounded-xl transition-colors';
   
+  // Create green dot status indicator
   const statusSpan = document.createElement('span');
-  statusSpan.className = 'online-status';
+  statusSpan.className = 'w-2 h-2 bg-green-500 rounded-full flex-shrink-0';
   
+  // Create user email display
   const emailSpan = document.createElement('span');
+  emailSpan.className = 'text-sm truncate';
   emailSpan.textContent = userId === currentUserId ? `${email} (You)` : email;
   
   listItem.appendChild(statusSpan);
